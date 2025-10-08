@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Love — Home</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN (for demo/quick prototyping) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+  <!-- Custom CSS (also demonstrates relative units, media queries, pseudo-selectors, CSS animations) -->
+  <style>
+    :root{
+      --accent: #6b21a8;
+      --muted: #6b7280;
+      --max-width: 1100px;
+      font-size: 16px; /* base for rem units */
+    }
+
+    body{ font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background: linear-gradient(180deg,#fff,#f8fafc); }
+    .container{ max-width: var(--max-width); margin: 0 auto; padding: 1.25rem; }
+
+    /* Responsive Navigation */
+    .nav-brand{ font-family: 'Merriweather', serif; font-weight:700; letter-spacing: .02em; }
+    .nav-item:hover{ color: var(--accent); }
+
+    /* Mobile nav toggle */
+    .mobile-nav{ display:none; }
+    @media (max-width: 768px){
+      .desktop-nav{ display:none; }
+      .mobile-nav{ display:block; }
+    }
+
+    /* SVG styling */
+    .logo-svg{ width:3.5rem; height:auto; }
+
+    /* Canvas wrapper */
+    #hero-canvas{ width:100%; height:220px; display:block; border-radius: .75rem; }
+
+    /* Cards use relative units */
+    .book-card{ padding: 1rem; border-radius: .75rem; box-shadow: 0 6px 18px rgba(15,23,42,.06); transition: transform .25s ease, box-shadow .25s ease; }
+    .book-card:hover{ transform: translateY(-6px); box-shadow: 0 12px 32px rgba(15,23,42,.09); }
+
+    /* Pseudo selectors and fancy button */
+    .cta{
+      display:inline-block; padding: .6rem 1rem; border-radius: .6rem; background:var(--accent); color:white; font-weight:600; text-decoration:none;
+      transition: transform .15s ease;
+    }
+    .cta:active{ transform: translateY(2px) scale(.995); }
+    .cta::after{ content: "\f02d"; font-family: "Font Awesome 5 Free"; font-weight:900; margin-left:.6rem; opacity:.9; }
+
+    /* Modal base */
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.45); display:flex; align-items:center; justify-content:center; z-index:50; }
+    .modal{ background:white; padding:1.1rem; border-radius: .75rem; width: min(720px, 95%); max-height: 85vh; overflow:auto; }
+
+    /* Small animation for page elements */
+    @keyframes floatUp{ from{ opacity:0; transform: translateY(8px); } to{ opacity:1; transform: translateY(0); } }
+    .fade-in{ animation: floatUp .45s cubic-bezier(.2,.9,.3,1) both; }
+
+    /* Feedback form custom styling */
+    .input:focus{ outline: 3px solid rgba(107,33,168,.12); }
+
+    /* Media queries for reader page */
+    @media (min-width: 1200px){
+      #hero-canvas{ height: 320px; }
+    }
+  </style>
+</head>
+<body class="antialiased text-gray-800">
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="container flex items-center justify-between py-4">
+      <div class="flex items-center gap-4">
+        <!-- Inline SVG logo -->
+        <svg class="logo-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#7c3aed"/>
+              <stop offset="1" stop-color="#06b6d4"/>
+            </linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="12" fill="url(#g)" />
+          <path d="M18 44c6-6 12-6 18 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+          <path d="M16 26c4-6 14-10 28-6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <a href="#home" class="nav-brand text-xl">Book <span class="text-indigo-600">Love</span></a>
+      </div>
+
+      <!-- Desktop nav -->
+      <nav class="desktop-nav">
+        <ul class="flex gap-6 items-center text-sm">
+          <li><a class="nav-item" href="#catalog">Catalog</a></li>
+          <li><a class="nav-item" href="#reader">Reader</a></li>
+          <li><a class="nav-item" href="#feedback">Feedback</a></li>
+          <li><a class="cta" href="#catalog">Browse</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile nav -->
+      <div class="mobile-nav">
+        <button id="mobileToggle" class="p-2 rounded focus:outline-none" aria-label="Toggle menu">
+          <i class="fa fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu panel -->
+    <div id="mobilePanel" class="hidden bg-white border-t shadow-sm">
+      <div class="container py-3">
+        <a class="block py-2" href="#catalog">Catalog</a>
+        <a class="block py-2" href="#reader">Reader</a>
+        <a class="block py-2" href="#feedback">Feedback</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container space-y-8">
+    <!-- HOME / HERO -->
+    <section id="home" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+      <div class="fade-in">
+        <h1 class="text-3xl md:text-4xl font-extrabold leading-tight">Welcome to <span class="text-indigo-600">Book Love</span></h1>
+        <p class="mt-3 text-base max-w-xl">A cozy independent bookstore: discover curated collections, read stories in the in-browser reader, and leave feedback. Everything is responsive, accessible, and built with Tailwind + custom CSS.</p>
+
+        <div class="mt-6 flex gap-3">
+          <a class="cta" href="#catalog">Explore Catalog</a>
+          <button id="openStory" class="px-4 py-2 rounded border border-gray-200">Read a Story</button>
+        </div>
+
+        <div class="mt-6 text-sm text-gray-500">
+          Tip: try the "Find near me" button on Feedback to share your location.
+        </div>
+      </div>
+
+      <div class="fade-in">
+        <!-- Canvas showing animated floating books -->
+        <canvas id="hero-canvas" class="bg-white"></canvas>
+      </div>
+    </section>
+
+    <!-- CATALOG PAGE -->
+    <section id="catalog" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">Catalog</h2>
+        <div class="text-sm text-gray-500">Showing curated picks</div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Book card (repeated) -->
+        <article class="book-card bg-white" tabindex="0">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=60" alt="book cover" class="w-full h-48 object-cover rounded" />
+          <h3 class="mt-3 font-semibold">The Quiet Library</h3>
+          <p class="text-sm text-gray-500 mt-1">by A. Author</p>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-sm">$9.99</div>
+            <div class="flex gap-2">
+              <button class="px-3 py-1 text-sm rounded border" onclick="openModal('book1')">Details</button>
+              <button class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700" onclick="openReader(sampleStories[0])">Read</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="book-card bg-white" tabindex="0">
+          <img src="https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=600&q=60" alt="book cover" class="w-full h-48 object-cover rounded" />
+          <h3 class="mt-3 font-semibold">Wandering Pages</h3>
+          <p class="text-sm text-gray-500 mt-1">by B. Writer</p>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-sm">$14.00</div>
+            <div class="flex gap-2">
+              <button class="px-3 py-1 text-sm rounded border" onclick="openModal('book2')">Details</button>
+              <button class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700" onclick="openReader(sampleStories[1])">Read</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="book-card bg-white" tabindex="0">
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=60" alt="book cover" class="w-full h-48 object-cover rounded" />
+          <h3 class="mt-3 font-semibold">Night Lamp</h3>
+          <p class="text-sm text-gray-500 mt-1">by C. Poet</p>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-sm">$11.50</div>
+            <div class="flex gap-2">
+              <button class="px-3 py-1 text-sm rounded border" onclick="openModal('book3')">Details</button>
+              <button class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700" onclick="openReader(sampleStories[2])">Read</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Reader Page (single page app style) -->
+    <section id="reader" class="space-y-4">
+      <h2 class="text-2xl font-bold">Reader</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <aside class="lg:col-span-1">
+          <div class="bg-white p-4 rounded">
+            <h3 class="font-semibold">Stories</h3>
+            <ul id="storyList" class="mt-3 space-y-2 text-sm text-gray-700"></ul>
+          </div>
+        </aside>
+
+        <div class="lg:col-span-2 bg-white p-4 rounded">
+          <div id="readerArea" class="prose max-w-none" style="min-height:250px;">
+            <h3 class="text-xl" id="storyTitle">Select a story</h3>
+            <div id="storyBody" class="mt-3 text-sm text-gray-700">Choose any story from the left to begin reading. You can change font size with the buttons below.</div>
+          </div>
+
+          <div class="mt-3 flex items-center gap-3">
+            <button onclick="changeFontSize(0.9)" class="px-3 py-1 rounded border">A-</button>
+            <button onclick="changeFontSize(1)" class="px-3 py-1 rounded border">A</button>
+            <button onclick="changeFontSize(1.2)" class="px-3 py-1 rounded border">A+</button>
+            <button id="toggleTheme" class="ml-auto px-3 py-1 rounded border">Toggle Theme</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback page with geolocation and images/stories -->
+    <section id="feedback" class="space-y-4">
+      <h2 class="text-2xl font-bold">Feedback & Find Near Me</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form id="feedbackForm" class="bg-white p-4 rounded space-y-3">
+          <label class="block text-sm">Name <input required class="input mt-1 w-full p-2 border rounded" name="name" /></label>
+          <label class="block text-sm">Email <input required type="email" class="input mt-1 w-full p-2 border rounded" name="email" /></label>
+          <label class="block text-sm">Message <textarea required class="input mt-1 w-full p-2 border rounded" name="message"></textarea></label>
+
+          <div class="flex gap-2">
+            <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white">Send</button>
+            <button type="button" id="findMe" class="px-4 py-2 rounded border">Find near me</button>
+          </div>
+        </form>
+
+        <div class="bg-white p-4 rounded">
+          <h3 class="font-semibold">Community Picks</h3>
+          <div class="mt-3 grid grid-cols-2 gap-2">
+            <figure class="text-center text-xs">
+              <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=60" class="rounded h-28 w-full object-cover" alt="reader" />
+              <figcaption class="mt-1">A quiet afternoon — A. Singh</figcaption>
+            </figure>
+
+            <figure class="text-center text-xs">
+              <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=400&q=60" class="rounded h-28 w-full object-cover" alt="bookstore" />
+              <figcaption class="mt-1">Local shelf — M. Perez</figcaption>
+            </figure>
+          </div>
+
+          <div class="mt-4 text-sm text-gray-500">
+            Stories shared by readers are displayed here. Try submitting feedback to add one.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-8 text-center text-sm text-gray-500">© <span id="year"></span> Book Love — created with ❤️</footer>
+  </main>
+
+  <!-- Modal templates (hidden until needed) -->
+  <div id="modalRoot" class="hidden"></div>
+
+  <!-- Sample data and scripts -->
+  <script>
+    // small dataset of stories
+    const sampleStories = [
+      {
+        id:'s1', title:'Moonlit Aisles', author:'A. Author', body:`<p>On the night the lights went dim, the books whispered. Shelves exhaled old paper scents and a child listened.</p><p>The librarians said nothing — they only made tea. Between the pages of a corner volume, the map to a hidden park awaited.</p>`
+      },
+      {
+        id:'s2', title:'A Walk Between Chapters', author:'B. Writer', body:`<p>She read the town like a paperback; every shop a paragraph, every window a verse. The city taught patience.</p><p>By the bookstore, an old cat kept the bench warm and the rain learned to wait.</p>`
+      },
+      {
+        id:'s3', title:'The Lamp and the Reader', author:'C. Poet', body:`<p>He lit a tiny lamp and watched the margins bloom. Margins are where lives breathe quietly.</p><p>For an hour, the world narrowed to the glow and the page.</p>`
+      }
+    ];
+
+    // Populate story list
+    const storyList = document.getElementById('storyList');
+    sampleStories.forEach((s,idx)=>{
+      const li = document.createElement('li');
+      li.innerHTML = `<button class="text-left w-full" onclick="openReader(sampleStories[${idx}])">${s.title} <span class='text-gray-400'>— ${s.author}</span></button>`;
+      storyList.appendChild(li);
+    });
+
+    function openReader(story){
+      if(!story) return;
+      document.getElementById('storyTitle').innerText = story.title + ' — ' + story.author;
+      document.getElementById('storyBody').innerHTML = story.body + '<p class="text-xs text-gray-400 mt-4">(This is sample content stored in the page.)</p>';
+      location.hash = '#reader';
+    }
+
+    // Modal helper
+    function openModal(id){
+      const modalRoot = document.getElementById('modalRoot');
+      modalRoot.innerHTML = `<div class="modal-backdrop" onclick="closeModal(event)"><div class="modal" onclick="event.stopPropagation()"><h3 class='font-bold mb-2'>Book details — ${id}</h3><p class='text-sm text-gray-600'>This modal demonstrates accessible modal structure. It includes more info, images and actions.</p><div class='mt-4 flex gap-2'><button class='px-3 py-1 rounded bg-indigo-600 text-white' onclick="openReader(sampleStories[0])">Open Reader</button><button class='px-3 py-1 rounded border' onclick="closeModal()">Close</button></div></div></div>`;
+      modalRoot.classList.remove('hidden');
+    }
+    function closeModal(e){
+      const modalRoot = document.getElementById('modalRoot');
+      modalRoot.innerHTML = '';
+      modalRoot.classList.add('hidden');
+    }
+
+    // Mobile nav
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobilePanel = document.getElementById('mobilePanel');
+    mobileToggle?.addEventListener('click',()=>{ mobilePanel.classList.toggle('hidden'); });
+
+    // Feedback form handling and geolocation
+    const feedbackForm = document.getElementById('feedbackForm');
+    feedbackForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(feedbackForm).entries());
+      showToast('Thanks for your feedback, ' + data.name + '!');
+      feedbackForm.reset();
+    });
+
+    function showToast(msg){
+      const t = document.createElement('div');
+      t.className = 'fixed bottom-6 right-6 bg-white p-3 rounded shadow-lg';
+      t.innerText = msg;
+      document.body.appendChild(t);
+      setTimeout(()=> t.remove(), 3500);
+    }
+
+    document.getElementById('findMe').addEventListener('click', ()=>{
+      if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
+      navigator.geolocation.getCurrentPosition((pos)=>{
+        const {latitude, longitude} = pos.coords;
+        showToast('Located: ' + latitude.toFixed(3) + ', ' + longitude.toFixed(3));
+        // show a tiny map via Google Maps link
+        window.open(`https://www.google.com/maps?q=${latitude},${longitude}`, '_blank');
+      }, (err)=>{ alert('Location permission denied or unavailable.'); });
+    });
+
+    // Canvas animation (floating book shapes)
+    (function(){
+      const canvas = document.getElementById('hero-canvas');
+      const ctx = canvas.getContext('2d');
+      let w=0,h=0, particles=[];
+      function resize(){ w=canvas.width = canvas.clientWidth*devicePixelRatio; h=canvas.height = canvas.clientHeight*devicePixelRatio; ctx.scale(devicePixelRatio, devicePixelRatio); }
+      function rand(min,max){ return Math.random()*(max-min)+min; }
+      function make(){ particles=[]; for(let i=0;i<6;i++){ particles.push({x:rand(10, w/devicePixelRatio-40), y:rand(10,h/devicePixelRatio-40), r:rand(14,30), vx:rand(-.3,.3), vy:rand(-.2,.6), ang:rand(0,Math.PI*2)}) } }
+      function drawBook(p){ ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(Math.sin((Date.now()+p.x)/1200 + p.ang)*0.07); ctx.fillStyle='rgba(99,102,241,0.95)'; ctx.fillRect(-p.r/1.7,-p.r/2,p.r*1.6,p.r); ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(-p.r/2,-p.r/2+4,p.r/1.6,p.r/5); ctx.restore(); }
+      function tick(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.y> (canvas.clientHeight-20)) p.y=10; if(p.x<10||p.x>canvas.clientWidth-30) p.vx*=-1; drawBook(p); }); requestAnimationFrame(tick); }
+      window.addEventListener('resize',()=>{ resize(); make(); }); resize(); make(); tick();
+    })();
+
+    // small UI helpers
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    // Reader font size & theme
+    function changeFontSize(scale){ document.getElementById('readerArea').style.fontSize = scale + 'rem'; }
+    let dark=false; document.getElementById('toggleTheme').addEventListener('click', ()=>{ dark = !dark; document.body.style.background = dark ? '#0f172a' : 'linear-gradient(180deg,#fff,#f8fafc)'; document.body.style.color = dark ? '#e6eef8' : '#111827'; });
+
+    // Sample open story button
+    document.getElementById('openStory').addEventListener('click', ()=> openReader(sampleStories[0]));
+  </script>
+
+ 
+</body>
+</html>
